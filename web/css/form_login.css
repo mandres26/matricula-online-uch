@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+    background-color: #FDFFE0;
+    color:#004785;
+    font-family: Arial, Verdana;
+    font-size: 16px;
+}
+
+form fieldset legend {
+    color:#004785;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size:110%;
+    font-variant:small-caps;
+    font-weight:bold;
+    padding:2px 15px;
+    position:relative;
+    margin:0px 0px 10px 0px;
+    top: -12px;
+}
+
+.button {
+    background-color:#d3effe;
+    border-color:#000000;
+    border-style:solid;
+    border-width:1px;
+    color:#3971A1;
+    float: right;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size: 0.8em !important;
+    font-weight:bold;
+    margin-top: 10px;
+}
+form fieldset{
+    border-radius: 20px;
+    margin: auto;
+    width:300px;
+}
+form #div_msg{
+    color: #E92424;
+    font-size: 0.7em;
+    margin:auto; 
+    width: 320px;
+}
+.tbLogin{
+    width: 100%;
+}
+.tbLogin input[type="text"],
+.tbLogin input[type="password"]{
+    margin: 0;
+    padding: 3px;
+    width: 80%;
+}
+.lblLogin{
+    display: block;
+    margin-bottom: 0;
+    margin-top: 3px;
+}

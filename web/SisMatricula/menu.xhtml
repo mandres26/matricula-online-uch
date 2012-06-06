@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:form>
+        <rich:toolBar style="margin: auto;" width="960" height="34" itemSeparator="line">
+            <rich:toolBarGroup>
+                <h:panelGroup>
+                    <h:graphicImage id="inicio" value="/images/home.png" />
+                    <a4j:commandLink value="Inicio" action="inicio" title="Inicio" />
+                </h:panelGroup>
+            </rich:toolBarGroup>
+            <rich:toolBarGroup>
+                <h:panelGroup>
+                    <h:graphicImage id="matricular" value="/images/matricula.png" />
+                    <a4j:commandLink value="Matricular" action="matricular" title="Matricula" />
+                </h:panelGroup>
+            </rich:toolBarGroup>
+            <rich:toolBarGroup>
+                <h:panelGroup>
+                    <h:graphicImage id="seguimiento_academico" value="/images/academico.png" />
+                    <a4j:commandLink value="Seguimiento Académico" action="seg_academico" title="Seguimiento Académico" />
+                </h:panelGroup>
+            </rich:toolBarGroup>
+            <rich:toolBarGroup>
+                <h:panelGroup>
+                    <h:graphicImage id="boleta_notas" value="/images/notas.png" />
+                    <a4j:commandLink value="Boleta de Notas" action="boleta_notas" title="Boleta de Notas" />
+                </h:panelGroup>
+            </rich:toolBarGroup>
+            <rich:toolBarGroup location="right">
+                <h:panelGroup>
+                    <h:graphicImage id="logout" value="/images/salir.png" />
+                    <a4j:commandLink value="Salir" action="#{authUsuarioMB.cerrarSesion()}" title="Salir" />
+                </h:panelGroup>
+            </rich:toolBarGroup>
+        </rich:toolBar>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+    <head>
+        <title>Deudas</title>
+    </head>
+    <body>
+        <a4j:loadStyle src="resource:///css/lista_deudas.css"  />
+
+        <div id="div_titulo">
+            <h:outputText value="DEUDAS PENDIENTES" />
+        </div>
+        <p>
+            <rich:panel style="width: 300px;margin: auto; padding: 0;">
+                <f:facet name="header">
+                    <h:outputText value="Datos:" />
+                </f:facet>
+                <h:panelGrid style="border-collapse: collapse;border: 1px solid #CBDEF9; margin: 0;" columns="2" columnClasses="td_label,td_campo">
+                    <h:outputText value="Alumno : " />
+                    <h:outputText value="#{aluDeudasMB.alumno.aluAppaterno} #{aluDeudasMB.alumno.aluApmaterno}, #{aluDeudasMB.alumno.aluNombres}" />
+                    <h:outputText value="Código : " />
+                    <h:outputText value="#{aluDeudasMB.alumno.aluCodigo}" />
+                </h:panelGrid>
+            </rich:panel>
+        </p>
+        <rich:dataTable value="#{aluDeudasMB.lstAlumnoPagoDeudas}" rendered="#{not empty aluDeudasMB.lstAlumnoPagoDeudas}"
+                        var="aluDeuda" columnClasses="colCelDeudas" styleClass="tbListaDeudas">
+            <f:facet name="header">
+                <rich:columnGroup columnClasses="headCelDeudas">
+                    <rich:column colspan="3">
+                        <h:outputText value="Pagos por regularizar" />
+                    </rich:column>
+                    <rich:column breakBefore="true">
+                        <h:outputText value="#" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Descripción" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Observación" />
+                    </rich:column>
+                </rich:columnGroup>
+            </f:facet>
+            <rich:column>
+                <h:outputText value="#{aluDeuda.numOrden}" />
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{aluDeuda.descripcion}" />
+            </rich:column>           
+            <rich:column>
+                <h:outputText value="#{aluDeuda.observacion}"/>
+            </rich:column>              
+        </rich:dataTable>
+
+        <rich:dataTable value="#{aluDeudasMB.lstAlumnoDocumentoDeudas}"  rendered="#{not empty aluDeudasMB.lstAlumnoDocumentoDeudas}"
+                        var="aluDeuda" columnClasses="colCelDeudas" styleClass="tbListaDeudas">
+            <f:facet name="header">
+                <rich:columnGroup columnClasses="headCelDeudas">
+                    <rich:column colspan="3">
+                        <h:outputText value="Documentos por regularizar" />
+                    </rich:column>
+                    <rich:column breakBefore="true">
+                        <h:outputText value="#" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Descripción" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Observación" />
+                    </rich:column>
+                </rich:columnGroup>
+            </f:facet>
+            <rich:column>
+                <h:outputText value="#{aluDeuda.numOrden}" />
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{aluDeuda.descripcion}" />
+            </rich:column>             
+            <rich:column>
+                <h:outputText value="#{aluDeuda.observacion}"/>
+            </rich:column>              
+        </rich:dataTable>
+
+        <h:form style="margin-top: 20px;text-align: center;">
+            <h:commandLink value="&lt;- Salir" action="#{authUsuarioMB.cerrarSesion}" styleClass="link_logout" />
+        </h:form>
+
+    </body>
+</html>
+
