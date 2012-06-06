@@ -1,0 +1,54 @@
+/* 
+    Document   : matricula
+    Created on : 29-may-2012, 11:00:36
+    Author     : USUARIO
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+body{
+    font-family: Arial, Verdana, Helvetica;
+    font-size: 16px;
+}
+#tb_contenedor{
+    border: 1px solid #000;
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: 20px;
+    width: 1024px;
+}
+#tb_contenedor td{
+    font-size: 0.6em;
+    width: 50%;
+}
+#tb_contenedor td,#tb_contenedor th{
+    border:1px solid #000;
+}
+#tb_alumnos_matr tbody{
+    width: 100%;
+}
+.tb_datatable{
+/*    border: 0;*/
+    display: block;
+    height: 200px !important;
+    margin: 0;
+    overflow-y:  scroll !important;
+}
+.tb_datatable,.tb_datatable_header{
+    width: 100% !important;
+}
+.tb_datatable td ,.tb_datatable_header th{
+    font-size: 12px !important;
+}
+.head_cursos_sug{
+    cursor: auto !important;
+}
+.tb_datatable td{
+/*    cursor: pointer;*/
+}
+.td_panel{
+    padding: 0;
+}

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="1.2" 
+              xmlns="http://java.sun.com/xml/ns/javaee" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+    <application>
+        <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+    </application>
+    
+    <!-- MANAGEDBEANS -->
+    <managed-bean>
+        <managed-bean-name>authUsuarioMB</managed-bean-name>
+        <managed-bean-class>net.uch.matriculaonline.managedBeans.AuthUsuarioMB</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>aluDeudasMB</managed-bean-name>
+        <managed-bean-class>net.uch.matriculaonline.managedBeans.AluDeudasMB</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>alumnoMB</managed-bean-name>
+        <managed-bean-class>net.uch.matriculaonline.managedBeans.AlumnoMB</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <!-- FIN MANAGEDBEANS -->
+    
+    <!-- NAVIGATION RULES -->
+    <navigation-rule>
+        <from-view-id>/Autenticacion/Login.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>ok</from-outcome>
+            <to-view-id>/SisMatricula/index.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>deuda</from-outcome>
+            <to-view-id>/SisMatricula/lista_deudas.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>error</from-outcome>
+            <to-view-id>/Autenticacion/Login.jsf</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/SisMatricula/*</from-view-id>
+        <navigation-case>
+            <from-outcome>inicio</from-outcome>
+            <to-view-id>/SisMatricula/index.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>matricular</from-outcome>
+            <to-view-id>/SisMatricula/matricula_online.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>seg_academico</from-outcome>
+            <to-view-id>/SisMatricula/seguimiento_academico.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>boleta_notas</from-outcome>
+            <to-view-id>/SisMatricula/boleta_notas.jsf</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <!-- FIN NAVIGATION RULES -->
+    
+    
+    <!-- CONTROL CACHE PHASE -->
+    <lifecycle>
+        <phase-listener id="nocache">net.uch.matriculaonline.util.CacheControlPhaseListener</phase-listener>
+    </lifecycle>
+    <!-- FIN CONTROL CACHE PHASE -->
+    <managed-bean>
+        <managed-bean-name>matriculaOnlineMB</managed-bean-name>
+        <managed-bean-class>net.uch.matriculaonline.managedBeans.MatriculaOnlineMB</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+</faces-config>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <head>
+        <title>Datos del Alumno</title>
+    </head>
+    <body>
+        <a4j:loadStyle src="resource:///css/index.css"/>
+        <ui:include src="menu.xhtml" />
+        
+        <table id="tb_datos_personales">
+            <tr>
+                <th colspan="5" class="header_bluesky"><h:outputText value="DATOS PERSONALES" /></th>
+            </tr>
+            <tr>
+                <td class="cel_label header_bluesky"><h:outputText value="Código : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.codigo}" /></td>
+                <td class="cel_label header_bluesky"><h:outputText value="Correo : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.correo}" /></td>
+                <th class="cel_dato" rowspan="5">
+                    <div id="div_foto">
+                        <a4j:mediaOutput id="foto" style="width : 100px;height: 150px;" element="img" cacheable="false" rendered="true" standby="cargando..."  
+                                         createContent="#{alumnoMB.imagen}"  mimeType="image/png" value="#{alumnoMB.alumno.aluId}"/>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td class="cel_label header_bluesky"><h:outputText value="Paterno : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.apPaterno}" /></td>
+                <td class="cel_label header_bluesky"><h:outputText value="Dirección : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.direccion}" /></td>
+            </tr>
+
+            <tr>
+                <td class="cel_label header_bluesky"><h:outputText value="Materno : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.apMaterno}" /></td>
+                <td class="cel_label header_bluesky"><h:outputText value="Teléfono : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.numFijo}" /></td>
+            </tr>
+
+            <tr>
+                <td class="cel_label header_bluesky"><h:outputText value="Nombres : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.nombres}" /></td>
+                <td class="cel_label header_bluesky"><h:outputText value="Celular : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.numCelular}" /></td>
+            </tr>
+            <tr>
+                <td class="cel_label header_bluesky"><h:outputText value="Género : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.genero}" /></td>
+                <td class="cel_label header_bluesky"><h:outputText value="Documento : " /></td>
+                <td class="cel_dato"><h:outputText value="#{alumnoMB.documento}" /></td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <head>
+        <title>Matricula Online</title>
+    </head>
+    <body>
+        <ui:include src="menu.xhtml" />
+        <a4j:loadStyle src="resource:///css/index.css"/>
+        <a4j:loadStyle src="resource:///css/matricula.css"/>
+        <table id="tb_contenedor">
+            <tr>
+                <th class="header_bluesky"><h:outputText value="CURSOS SUGERIDOS" /></th>
+                <th class="header_bluesky"><h:outputText value="HORARIO" /></th>
+            </tr>
+            <tr>
+                <td class="td_panel">
+                    <h:form>
+                        <rich:dataTable styleClass="tb_datatable"  value="#{matriculaOnlineMB.lstCursosSugeridos}" 
+                                        var="cursoSugerido"
+                                        onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+                                        onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header">
+                                    <h:outputText value="Cód." />
+                                </f:facet>
+                                <f:param name="curId" value="" />
+                                <a4j:commandLink actionListener="#{matriculaOnlineMB.verSecciones}" reRender="tb_secciones" value="#{cursoSugerido.plancurCodigo}" >
+                                    <a4j:actionparam name="curId" value="#{cursoSugerido.curApeId}" assignTo="#{matriculaOnlineMB.curSugerido}"/>
+                                </a4j:commandLink>
+                            </rich:column>
+                            <rich:column style="width: 250px !important;">
+                                <f:facet name="header">
+                                    <h:outputText value="Curso" />
+                                </f:facet>
+                                <h:outputText value="#{cursoSugerido.asignatura}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header" >
+                                    <h:outputText value="Creditos" />
+                                </f:facet>
+                                <h:outputText value="#{cursoSugerido.plancurCredito}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header" >
+                                    <h:outputText value="Ciclo" />
+                                </f:facet>
+                                <h:outputText value="#{cursoSugerido.ciclo}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header" >
+                                    <h:outputText value="Tipo Curso" />
+                                </f:facet>
+                                <h:outputText value="#{cursoSugerido.tipo}" />
+                            </rich:column>
+                            <rich:column  style="width: 50px !important;">
+                                <f:facet name="header" >
+                                    <h:outputText value="Estado" />
+                                </f:facet>
+                                <h:outputText value="#{cursoSugerido.tipo}" />
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:form>
+                </td>
+                <td rowspan="3" class="td_panel" style="vertical-align: top;">
+                    <rich:dataTable id="tb_horario"
+                                    style="display: block;margin: 0;overflow-y: scroll;font-size: 14px !important;height: 427px;"
+                                    onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+                                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+                                    value="#{matriculaOnlineMB.lstHorarios}" var="horPlantilla">
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Hora" />
+                            </f:facet>
+                            <h:outputText value="#{horPlantilla.horaIni} - #{horPlantilla.horaFin}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Lunes" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curLun}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Martes" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curMar}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Miércoles" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curMie}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Jueves" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curJue}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Viernes" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curVie}" />
+                        </rich:column>
+                        <rich:column>
+                            <f:facet name="header" >
+                                <h:outputText value="Sábado" />
+                            </f:facet>
+                            <h:outputText escape="false" value="#{horPlantilla.curSab}" />
+                        </rich:column>
+                    </rich:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <th class="header_bluesky">
+                    <h:outputText value="SECCIONES" />
+                </th>
+            </tr>
+            <tr>
+                <td class="td_panel">
+                    <h:form>
+                        <rich:dataTable styleClass="tb_datatable" id="tb_secciones"  value="#{matriculaOnlineMB.lstSecciones}" 
+                                        var="seccion" headerClass="head_cursos_sug"
+                                        onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+                                        onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Seccion" /></f:facet>
+                                <h:outputText value="#{seccion.nomSeccion}" />
+                            </rich:column>
+                            <rich:column>
+                                <f:facet name="header"><h:outputText value="Horario" /></f:facet>
+                                <h:outputText escape="false" value="#{seccion.horario}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Vacantes" /></f:facet>
+                                <h:outputText value="#{seccion.vacantes}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Matriculados" /></f:facet>
+                                <h:outputText value="#{seccion.matriculados}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important; text-align: center;">
+                                <f:facet name="header"><h:outputText value="Ver Matriculados" /></f:facet>
+                                <a4j:commandButton actionListener="#{matriculaOnlineMB.verMatriculados}" reRender="tb_alumnos_matr"
+                                                   oncomplete="Richfaces.showModalPanel('mp_lista_alumnos_mat')" image="/images/viewmag.png" >
+                                    <a4j:actionparam name="secId" value="#{seccion.secId}" />
+                                </a4j:commandButton>
+                            </rich:column>
+                            <rich:column style="width: 50px !important; text-align: center;">
+                                <f:facet name="header"><h:outputText value="Matricular" /></f:facet>
+                                <a4j:commandButton actionListener="#{matriculaOnlineMB.agregarCurso}" reRender="tb_cursosmat, tb_detalle_matriculas, tb_horario"
+                                                   image="/images/edit_add.png" >
+                                    <a4j:actionparam name="secId" value="#{seccion.secId}" />
+                                    <a4j:actionparam name="curApeId" value="#{seccion.curapeId}" />
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:form>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" class="header_bluesky">
+                    <h:outputText value="--=CURSOS MATRICULADOS=--" />
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <h:form>
+                        <rich:dataTable  id="tb_cursosmat"  value="#{matriculaOnlineMB.lstCursosMatriculados}" 
+                                         var="curMat" headerClass="head_cursos_sug" width="1024"
+                                         onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+                                         onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Cód. Curso" /></f:facet>
+                                <h:outputText value="#{curMat.curApeCodigo}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Curso" /></f:facet>
+                                <h:outputText value="#{curMat.curApeNombre}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Seccion" /></f:facet>
+                                <h:outputText value="#{curMat.secCodigo}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Ciclo" /></f:facet>
+                                <h:outputText value="#{curMat.ciclo}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Créditos" /></f:facet>
+                                <h:outputText value="#{curMat.creditos}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Tipo Curso" /></f:facet>
+                                <h:outputText value="#{curMat.tipoCurso}" />
+                            </rich:column>
+                            <rich:column style="width: 50px !important;">
+                                <f:facet name="header"><h:outputText value="Borrar" /></f:facet>
+                                <a4j:commandButton actionListener="#{matriculaOnlineMB.quitarCurso}" reRender="tb_cursosmat,tb_detalle_matriculas"
+                                                   image="/images/cancel.png" >
+                                    <a4j:actionparam name="secId" value="#{curMat.secId}" />
+                                    <a4j:actionparam name="curApeId" value="#{curMat.curApeId}" />
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:form>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <rich:dataTable headerClass="head_cursos_sug" id="tb_detalle_matriculas" 
+                                    title="Detalle de matricula" value="#{matriculaOnlineMB.lstMatDetalle}"
+                                    var="matDet">
+                        <rich:column>
+                            <f:facet name="header">
+                                <h:outputText value="Máximo de créditos permitidos"/>
+                            </f:facet>
+                            <h:outputText value="#{matDet.maxCredPerm}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <f:facet name="header">
+                                <h:outputText value="Total de créditos matriculados"/>
+                            </f:facet>
+                            <h:outputText value="#{matDet.totalCredMatr}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <f:facet name="header">
+                                <h:outputText value="Número de cursos matriculados"/>
+                            </f:facet>
+                            <h:outputText value="#{matDet.numCurMat}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                            <h:outputText value="#{matDet.fechaMatricula}"/>
+                        </rich:column>
+                    </rich:dataTable>
+                </th>
+            </tr>
+        </table>
+    </body>
+    <rich:modalPanel resizeable="true" id="mp_lista_alumnos_mat" minHeight="400" height="500"
+                     minWidth="200" width="350" zindex="2000">
+        <rich:effect  name="hideDiv"  for="contentDiv" type="Fade" />
+        <rich:effect  name="showDiv"  for="contentDiv" type="Appear" />
+        <f:facet name="header">
+            <h:outputText value="Lista de alumnos matriculados" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:graphicImage value="/images/stop.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('mp_lista_alumnos_mat')" title="Cerrar"/>
+        </f:facet>
+        <div style="width: 100% !important;height: 550px !important;">
+            <rich:dataTable id="tb_alumnos_matr" style="width: 100% !important;height: 95%;display: block;overflow-y: scroll;"
+                            value="#{matriculaOnlineMB.lstAlumnosMatriculados}" var="alumno" >
+                <rich:column style="width: 20%">
+                    <f:facet name="header"><h:outputText value="Código" /></f:facet>
+                    <h:outputText value="#{alumno.aluCodigo}" />
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header"><h:outputText value="Alumno" /></f:facet>
+                    <h:outputText value="#{alumno.aluAppaterno} #{alumno.aluApmaterno}, #{alumno.aluNombres}" />
+                </rich:column>
+            </rich:dataTable>
+        </div>
+    </rich:modalPanel>
+</html>
+

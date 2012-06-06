@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a4j="http://richfaces.org/a4j"
+      >
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        <a4j:loadStyle src="resource:///css/form_login.css"  />
+        <h:form id="formulario">
+            <p style="height:150px;"  align="center" />
+            <div>
+                <fieldset>
+                    <legend>Login</legend>
+                    <h:panelGrid styleClass="tbLogin">
+                        <h:outputText value="USUARIO " styleClass="lblLogin"/>
+                        <h:inputText id="j_username" size="27" required="true" label="Usuario" value="#{authUsuarioMB.usuario}"/>
+
+                        <h:outputText value="PASSWORD " styleClass="lblLogin" />
+                        <h:inputSecret id="j_password"  size="27" required="true" label="Contraseña" value="#{authUsuarioMB.password}" />
+
+                        <h:panelGroup />
+                        <h:commandButton value="Entrar" action="#{authUsuarioMB.checkUser}" styleClass="button" />
+                    </h:panelGrid>
+                </fieldset>
+                <div id="div_msg">
+                    <h:outputText value="#{authUsuarioMB.mensaje}" />
+                </div>
+            </div>
+        </h:form>
+    </body>
+</html>
+

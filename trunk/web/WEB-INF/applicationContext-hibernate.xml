@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - Application context definition for MyFaces, Hibernate and Spring Integration application.
+-->
+<beans>
+
+    <!-- ========================= RESOURCE DEFINITIONS ========================= -->
+
+        <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+        <!-- (in this case, JDBC-related settings for the dataSource definition below) -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>/WEB-INF/hibernate.properties</value>
+        </property>
+    </bean>
+
+    <!-- Local DataSource that works in any environment -->
+        <!-- Note that DriverManagerDataSource does not pool; it is not intended for production -->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>${jdbc.driverClassName}</value>
+        </property>
+        <property name="url">
+            <value>${jdbc.url}</value>
+        </property>
+        <property name="username">
+            <value>${jdbc.username}</value>
+        </property>
+        <property name="password">
+            <value>${jdbc.password}</value>
+        </property>
+    </bean>
+
+    <!-- JNDI DataSource for J2EE environments -->
+        <!--
+        <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+                <property name="jndiName"><value>java:comp/env/jdbc/roseindiaDB_local</value></property>
+        </bean>
+        -->
+        <!-- Hibernate SessionFactory -->
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="hibernateProperties">
+            <ref local="hibernateProperties"/>
+        </property>
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+        <property name="mappingResources">
+            <list>
+                <value>/net/uch/matriculaonline/hbm/AcActa.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcActaDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAlumno.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAlumnoDato.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAlumnoDocumento.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAlumnoRetirado.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcApoderado.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcApoderadoAlumno.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcArea.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAreaDocente.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcAula.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcContenidoDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcContenidoTematico.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcCurso.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcCursoAperturado.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcDisponibilidad.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcDocente.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcEquivalencia.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcEspecialidad.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcFacultad.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcHorario.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcHorarioArea.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcImportacionNotas.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcLocal.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcMatricula.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcMatriculaConafu.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcMatriculaCurso.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcMatriculaCursoConafu.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcNota.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcNotasTemporales.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPabellon.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPlanCurso.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPlancurricular.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPreRequisitos.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPromediosFinales.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcPromediosParciales.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcSeccion.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcSemestre.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcSisEvaDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcSisEvaPersonalizado.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcSisEvaluacion.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcTurno.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AcTurnoDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdAlumnoTarifa.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdClientes.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdComprobantePago.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdConceptoPago.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdDevTrans.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdDevTransDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdEstructuraPagos.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdEstructuraPagosAfecta.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdEstructuraPagosDetalle.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdPago.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdProrroga.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdRubros.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/AdSaldo.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/TbBloqueoWeb.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/TbCatalogo.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/TbParentesco.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/TbEvaluacionDatos.hbm.xml</value>
+                
+                <!-- STORED PROCEDURES -->
+                
+                <value>/net/uch/matriculaonline/hbm/storedprocedures/SpCursosPorMatricular.hbm.xml</value>
+                <value>/net/uch/matriculaonline/hbm/storedprocedures/SpHorariosPorCursoYSeccion.hbm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="hibernateProperties"  class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+                <!--<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>-->
+                <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.c3p0.min_size">10</prop>
+                <prop key="hibernate.c3p0.max_size">100</prop>
+                <prop key="hibernate.c3p0.timeout">1500</prop>
+                <prop key="hibernate.c3p0.max_elements">100</prop>
+                <prop key="hibernate.c3p0.idle_test_period">3000</prop>
+            </props>
+        </property>
+    </bean>
+
+
+<!--    Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+    </bean>
+
+    <!--
+     ========================= BUSINESS OBJECT DEFINITIONS ========================= 
+
+        
+         Data access object: Hibernate implementation.
+    -->
+    <bean id="HibernateSpringDaoAlumno" class="net.uch.matriculaonline.hibernateSpringDao.HSAlumnoDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoAlumnoTarifa" class="net.uch.matriculaonline.hibernateSpringDao.HSAlumnoTarifaDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoAlumnoDocumento" class="net.uch.matriculaonline.hibernateSpringDao.HSAlumnoDocumentoDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoCatalogo" class="net.uch.matriculaonline.hibernateSpringDao.HSCatalogoDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoCursoAperturado" class="net.uch.matriculaonline.hibernateSpringDao.HSCursoAperturadoDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoMatricula" class="net.uch.matriculaonline.hibernateSpringDao.HSMatriculaDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+    <bean id="HibernateSpringDaoSeccion" class="net.uch.matriculaonline.hibernateSpringDao.HSSeccionDAOImpl">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+<!--
+                - Transactional proxy for Application's central data access object.
+                -
+                - Defines specific transaction attributes with "readOnly" markers,
+                - which is an optimization that is particularly valuable with Hibernate
+                - (to suppress unnecessary flush attempts for read-only operations).
+                -
+                - Note that in a real-life app with multiple transaction proxies,
+                - you will probably want to use parent and child bean definitions
+                - as described in the manual, to reduce duplication.
+    
+-->
+
+    <bean id="SpringHibernateDaoAlumno" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoAlumno"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoAlumnoTarifa" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoAlumnoTarifa"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoAlumnoDocumento" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoAlumnoDocumento"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoCatalogo" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoCatalogo"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoCursoAperturado" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoCursoAperturado"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoMatricula" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoMatricula"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="SpringHibernateDaoSeccion" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref local="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref local="HibernateSpringDaoSeccion"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="store*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
