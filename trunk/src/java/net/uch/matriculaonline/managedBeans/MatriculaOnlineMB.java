@@ -36,6 +36,12 @@ public class MatriculaOnlineMB {
     private List<SeccionBean> m_lstSecciones;
     private List<MatriculasDetalleBean> m_lstMatDetalle;
     private TreeMap<String, HorarioBean> m_tmHorarios;
+    private TreeMap<String/*
+             * hora
+             */, TreeMap<String/*
+             * dia
+             */, String>> m_tmHorariosEstruc;
+
     /**
      * Creates a new instance of MatriculaOnlineMB
      */
@@ -61,11 +67,15 @@ public class MatriculaOnlineMB {
         //--Detalle de Matricula
         m_lstMatDetalle = new ArrayList<MatriculasDetalleBean>();
         m_lstMatDetalle.add( new MatriculasDetalleBean() );
+        m_lstMatDetalle.get( 0 ).setMaxCredPerm( 25 );
 
-        //--Plantilla de Horario
+        //--Horarios
         m_lstHorarios = new ArrayList<HorarioBean>();
         m_tmHorarios = new TreeMap<String, HorarioBean>();
-        
+
+        //--Estructura de Horario
+        m_tmHorariosEstruc = new TreeMap<String, TreeMap<String, String>>();
+
     }
 
     public int getCurSugerido() {
@@ -233,7 +243,7 @@ public class MatriculaOnlineMB {
                 m_lstCursosMatriculados.add( cursoMat );
 
                 //MUESTRA EL CURSO EN EL HORARIO
-                mostrarCursoEnHorario( iCurApeId, iSecId );
+//                mostrarCursoEnHorario( iCurApeId, iSecId );
 
                 //Ingrementa el total de créditos según el alumno va eligiendo cursos.
                 m_lstMatDetalle.get( 0 ).setTotalCredMatr( m_lstMatDetalle.get( 0 ).getTotalCredMatr() + Integer.parseInt( cursoMat.getCreditos() ) );
@@ -268,36 +278,112 @@ public class MatriculaOnlineMB {
     }
 
     private void mostrarCursoEnHorario( int iCurApeId, int iSecId ) {
-        int iSizeHorCurSec;
-        String[] asHora;
-        SPHorariosPorCursoYSeccion spHorCurSec;
-        HorarioBean horario;
-        HSMatriculaDAO matriculaDAO;
-        List<SPHorariosPorCursoYSeccion> lstHorCurSec;
+        int iSizeHors;
+        String sCurso = "";
+        String[] sHoras;
+        String[] asDias = { "lunes", "martes", "miercoles", "jueves", "viernes", "domingo" };
+        HorarioBean horBean;
+        SPHorariosPorCursoYSeccion horCS;
+        List<SPHorariosPorCursoYSeccion> lstHorariosXCyS;
+        TreeMap<String, String> tmHorDia;
+        TreeMap<String, String> tmHorario;
         try {
-            matriculaDAO = (HSMatriculaDAO) ServiceFinder.findBean( ConstantesWeb.SHDAO_MATRICULA );
-            lstHorCurSec = matriculaDAO.seleccionarHorariosPorCurapeIdYSecId( iCurApeId, iSecId );
-            if ( lstHorCurSec != null && !lstHorCurSec.isEmpty() ) {
-                iSizeHorCurSec = lstHorCurSec.size();
-
-                for ( int i = 0; i < iSizeHorCurSec; i++ ) {
-                    spHorCurSec = lstHorCurSec.get( i );
-                    asHora = spHorCurSec.getHora().split( "-" );
-                    if( m_tmHorarios.containsKey( spHorCurSec.getHora() ) ){
-                        horario = m_tmHorarios.get( spHorCurSec.getHora() );
-                    } else {
-                        horario = new HorarioBean( asHora[0].trim(), asHora[1].trim(), spHorCurSec.getLunes(),
-                                spHorCurSec.getMartes(), spHorCurSec.getMiercoles(), spHorCurSec.getJueves(),
-                                spHorCurSec.getViernes(), spHorCurSec.getSabado(), "" );
+            lstHorariosXCyS = SeccionBean.traerHorarioPorCurApeYSec( iCurApeId, iSecId );
+            iSizeHors = lstHorariosXCyS.size();
+            for ( int i = 0; i < iSizeHors; i++ ) {
+                horCS = lstHorariosXCyS.get( i );
+                tmHorDia = m_tmHorariosEstruc.get( horCS.getHora() );
+                if ( tmHorDia != null ) {
+                    for ( String sDia : asDias ) {
+                        if ( !horCS.getNomDia( sDia ).isEmpty() ) {
+                            if ( tmHorDia.get( sDia ) != null ) {
+                                return;
+                            }
+                        }
                     }
-                    m_tmHorarios.put( spHorCurSec.getHora(), horario );
                 }
-                m_lstHorarios.addAll( m_tmHorarios.values() );
             }
+            
+            tmHorario = SeccionBean.armarHorarios( iCurApeId, iSecId );
+            if ( !tmHorario.isEmpty() ) {
+                for ( String sKeyDia : tmHorario.keySet() ) {
+                    sHoras = tmHorario.get( sKeyDia ).split( "<br />" );
+                    for ( String sHora : sHoras ) {
+                        if ( m_tmHorariosEstruc.get( sHora ) == null ) {
+                            m_tmHorariosEstruc.put( sHora, new TreeMap<String, String>() );
+                        }
+                        horBean = new HorarioBean();
+                        if ( sKeyDia.equals( "lunes" ) ) {
+                            sCurso = "curLunes";
+                        } else if ( sKeyDia.equals( "martes" ) ) {
+                            sCurso = "curMartes";
+                        } else if ( sKeyDia.equals( "miercoles" ) ) {
+                            horBean.setCurMie( "XXX" );
+                            sCurso = "curMiercoles";
+                        } else if ( sKeyDia.equals( "jueves" ) ) {
+                            horBean.setCurJue( "XXX" );
+                            sCurso = "curJueves";
+                        } else if ( sKeyDia.equals( "viernes" ) ) {
+                            horBean.setCurVie( "XXX" );
+                            sCurso = "curViernes";
+                        } else if ( sKeyDia.equals( "sabado" ) ) {
+                            sCurso = "curSabado";
+                        }
+                        m_tmHorariosEstruc.get( sHora ).put( sKeyDia, sCurso );
+
+                    }
+                }
+
+                m_lstHorarios = new ArrayList<HorarioBean>();
+                for ( String sKeyHora : m_tmHorariosEstruc.keySet() ) {
+                    for ( String sKeyDia : m_tmHorariosEstruc.get( sKeyHora ).keySet() ) {
+                        horBean = new HorarioBean();
+                        horBean.setHoraIni( sKeyHora.split( "-" )[0].trim() );
+                        horBean.setHoraFin( sKeyHora.split( "-" )[1].trim() );
+                        if ( sKeyDia.equals( "lunes" ) ) {
+                            horBean.setCurLun( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        } else if ( sKeyDia.equals( "martes" ) ) {
+                            horBean.setCurMar( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        } else if ( sKeyDia.equals( "miercoles" ) ) {
+                            horBean.setCurMie( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        } else if ( sKeyDia.equals( "jueves" ) ) {
+                            horBean.setCurJue( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        } else if ( sKeyDia.equals( "viernes" ) ) {
+                            horBean.setCurVie( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        } else if ( sKeyDia.equals( "sabado" ) ) {
+                            horBean.setCurSab( m_tmHorariosEstruc.get( sKeyHora ).get( sKeyDia ) );
+                        }
+                        m_lstHorarios.add( horBean );
+                    }
+                }
+
+            }
+
         } catch ( Exception ex ) {
             ex.printStackTrace();
         }
     }
+    /*
+     * private void mostrarCursoEnHorario( int iCurApeId, int iSecId ) { int
+     * iSizeHorCurSec; String[] asHora; SPHorariosPorCursoYSeccion spHorCurSec;
+     * HorarioBean horario; HSMatriculaDAO matriculaDAO;
+     * List<SPHorariosPorCursoYSeccion> lstHorCurSec; try { matriculaDAO =
+     * (HSMatriculaDAO) ServiceFinder.findBean( ConstantesWeb.SHDAO_MATRICULA );
+     * lstHorCurSec = matriculaDAO.seleccionarHorariosPorCurapeIdYSecId(
+     * iCurApeId, iSecId ); if ( lstHorCurSec != null && !lstHorCurSec.isEmpty()
+     * ) { iSizeHorCurSec = lstHorCurSec.size();
+     *
+     * for ( int i = 0; i < iSizeHorCurSec; i++ ) { spHorCurSec =
+     * lstHorCurSec.get( i ); asHora = spHorCurSec.getHora().split( "-" ); if(
+     * m_tmHorarios.containsKey( spHorCurSec.getHora() ) ){ horario =
+     * m_tmHorarios.get( spHorCurSec.getHora() ); } else { horario = new
+     * HorarioBean( asHora[0].trim(), asHora[1].trim(), spHorCurSec.getLunes(),
+     * spHorCurSec.getMartes(), spHorCurSec.getMiercoles(),
+     * spHorCurSec.getJueves(), spHorCurSec.getViernes(),
+     * spHorCurSec.getSabado(), "" ); } m_tmHorarios.put( spHorCurSec.getHora(),
+     * horario ); } m_lstHorarios.addAll( m_tmHorarios.values() ); } } catch (
+     * Exception ex ) { ex.printStackTrace(); } }
+     */
 
     private boolean contieneCurso( AcCursoAperturado cursoApe, List<CursoAMatricularBean> lstCursosMatriculados ) {
         boolean blContiene = false;

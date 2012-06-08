@@ -17,7 +17,9 @@ public class MatriculasDetalleBean {
     private int m_iMaxCredPerm = 50;
     private int m_iTotalCredMatr;
     private int m_iNumCurMat;
+    private double m_dCostoCalculado;
     private String m_sFechaMatricula;
+    private String m_sDetalleCosto;
 
     public MatriculasDetalleBean() {
     }
@@ -61,4 +63,21 @@ public class MatriculasDetalleBean {
     public void setFechaMatricula( String sFechaMatricula ) {
         m_sFechaMatricula = sFechaMatricula;
     }
+
+    public double getCostoCalculado() {
+        return m_dCostoCalculado;
+    }
+
+    public void setCostoCalculado( double dCostoCalculado ) {
+        this.m_dCostoCalculado = dCostoCalculado;
+    }
+
+    public String getDetalleCosto() {
+        return m_sDetalleCosto;
+    }
+
+    public void setDetalleCosto( String sDetalleCosto ) {
+        this.m_sDetalleCosto = sDetalleCosto;
+    }
+    
 }
