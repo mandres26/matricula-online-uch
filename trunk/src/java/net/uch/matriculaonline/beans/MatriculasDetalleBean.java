@@ -79,5 +79,4 @@ public class MatriculasDetalleBean {
     public void setDetalleCosto( String sDetalleCosto ) {
         this.m_sDetalleCosto = sDetalleCosto;
     }
-    
 }

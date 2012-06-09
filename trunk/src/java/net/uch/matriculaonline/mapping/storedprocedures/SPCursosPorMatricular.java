@@ -6,7 +6,6 @@ package net.uch.matriculaonline.mapping.storedprocedures;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import org.hibernate.type.BlobType;
 
 /**
  *

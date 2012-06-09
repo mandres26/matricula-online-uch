@@ -27,6 +27,7 @@ import net.uch.matriculaonline.util.ConstantesWeb;
 public class MatriculaOnlineMB {
 
     private int m_iCurSugerido;
+    private int m_iMaxCred;
     private AcAlumno m_alumno;
     private HSMatriculaDAO m_matriculaDAO;
     private List<SPCursosPorMatricular> m_lstCursosSugeridos;
@@ -35,6 +36,7 @@ public class MatriculaOnlineMB {
     private List<AcAlumno> m_lstAlumnosMatriculados;
     private List<SeccionBean> m_lstSecciones;
     private List<MatriculasDetalleBean> m_lstMatDetalle;
+    private Map<String, String> m_hmCiclosConCurPend;
     private TreeMap<String, HorarioBean> m_tmHorarios;
     private TreeMap<String/*
              * hora
@@ -53,6 +55,21 @@ public class MatriculaOnlineMB {
             m_lstCursosSugeridos = new ArrayList<SPCursosPorMatricular>();
         }
 
+        //Lista de ciclos con cursos pendientes
+        m_hmCiclosConCurPend = new HashMap<String, String>();
+        String sCiclo;
+        AcCursoAperturado curApe;
+        
+        for ( SPCursosPorMatricular spCurXMat : m_lstCursosSugeridos ) {
+            sCiclo = spCurXMat.getPlancurCiclo();
+            if ( !m_hmCiclosConCurPend.containsKey( sCiclo ) ) {
+                m_hmCiclosConCurPend.put( sCiclo, sCiclo );
+            }
+        }
+
+        //Maximo creditos permitidos
+        m_iMaxCred = traerMaximoCreditosPermitidos();
+        
         //-- Secciones
         m_lstSecciones = new ArrayList<SeccionBean>();
         //--Horarios
@@ -67,7 +84,7 @@ public class MatriculaOnlineMB {
         //--Detalle de Matricula
         m_lstMatDetalle = new ArrayList<MatriculasDetalleBean>();
         m_lstMatDetalle.add( new MatriculasDetalleBean() );
-        m_lstMatDetalle.get( 0 ).setMaxCredPerm( 25 );
+        m_lstMatDetalle.get( 0 ).setMaxCredPerm( m_iMaxCred );
 
         //--Horarios
         m_lstHorarios = new ArrayList<HorarioBean>();
@@ -141,8 +158,6 @@ public class MatriculaOnlineMB {
         SeccionBean seccion;
         HSSeccionDAO seccionDAO;
         Set<AcSeccion> lstAcSecciones;
-
-
 
         try {
             iCursoapeId = Integer.parseInt( CommonWeb.getParamFromUI( event, "curId" ) );
@@ -303,7 +318,7 @@ public class MatriculaOnlineMB {
                     }
                 }
             }
-            
+
             tmHorario = SeccionBean.armarHorarios( iCurApeId, iSecId );
             if ( !tmHorario.isEmpty() ) {
                 for ( String sKeyDia : tmHorario.keySet() ) {
@@ -363,27 +378,6 @@ public class MatriculaOnlineMB {
             ex.printStackTrace();
         }
     }
-    /*
-     * private void mostrarCursoEnHorario( int iCurApeId, int iSecId ) { int
-     * iSizeHorCurSec; String[] asHora; SPHorariosPorCursoYSeccion spHorCurSec;
-     * HorarioBean horario; HSMatriculaDAO matriculaDAO;
-     * List<SPHorariosPorCursoYSeccion> lstHorCurSec; try { matriculaDAO =
-     * (HSMatriculaDAO) ServiceFinder.findBean( ConstantesWeb.SHDAO_MATRICULA );
-     * lstHorCurSec = matriculaDAO.seleccionarHorariosPorCurapeIdYSecId(
-     * iCurApeId, iSecId ); if ( lstHorCurSec != null && !lstHorCurSec.isEmpty()
-     * ) { iSizeHorCurSec = lstHorCurSec.size();
-     *
-     * for ( int i = 0; i < iSizeHorCurSec; i++ ) { spHorCurSec =
-     * lstHorCurSec.get( i ); asHora = spHorCurSec.getHora().split( "-" ); if(
-     * m_tmHorarios.containsKey( spHorCurSec.getHora() ) ){ horario =
-     * m_tmHorarios.get( spHorCurSec.getHora() ); } else { horario = new
-     * HorarioBean( asHora[0].trim(), asHora[1].trim(), spHorCurSec.getLunes(),
-     * spHorCurSec.getMartes(), spHorCurSec.getMiercoles(),
-     * spHorCurSec.getJueves(), spHorCurSec.getViernes(),
-     * spHorCurSec.getSabado(), "" ); } m_tmHorarios.put( spHorCurSec.getHora(),
-     * horario ); } m_lstHorarios.addAll( m_tmHorarios.values() ); } } catch (
-     * Exception ex ) { ex.printStackTrace(); } }
-     */
 
     private boolean contieneCurso( AcCursoAperturado cursoApe, List<CursoAMatricularBean> lstCursosMatriculados ) {
         boolean blContiene = false;
@@ -399,5 +393,19 @@ public class MatriculaOnlineMB {
         }
 
         return blContiene;
+    }
+
+    private int traerMaximoCreditosPermitidos() {
+        HSMatriculaDAO matriculaDAO;
+        try {
+            matriculaDAO = (HSMatriculaDAO) ServiceFinder.findBean( ConstantesWeb.SHDAO_MATRICULA );
+            int iEspId = m_alumno.getAcEspecialidad().getEspId();
+            List lstCiclos = new ArrayList( m_hmCiclosConCurPend.keySet() );
+            m_iMaxCred = matriculaDAO.traerMaximoCreditosPermitidos( iEspId, lstCiclos );
+        } catch ( Exception ex ) {
+            m_iMaxCred = 0;
+            ex.printStackTrace();
+        }
+        return m_iMaxCred;
     }
 }

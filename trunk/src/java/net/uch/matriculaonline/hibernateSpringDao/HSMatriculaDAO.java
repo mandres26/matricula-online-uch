@@ -9,4 +9,8 @@ public interface HSMatriculaDAO {
     public List<SPCursosPorMatricular> seleccionarCursosPorMatricular( int iAluId );
 
     public List<SPHorariosPorCursoYSeccion> seleccionarHorariosPorCurapeIdYSecId( int iCurapeId, int iSecId );
+
+    public List traerTotalCreditosPorCiclo( int iEspId,  List lstCiclos );
+    
+    public int traerMaximoCreditosPermitidos( int iEspId,  List lstCiclos );
 }
